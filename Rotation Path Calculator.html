@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotation Path Calculator</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Use Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        /* Custom card style */
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* lg */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Custom slider styles */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d1d5db; /* gray-300 */
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        input[type="range"]:hover { opacity: 1; }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6; /* blue-500 */
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6; /* blue-500 */
+            cursor: pointer;
+        }
+        /* Style for the number input */
+        input[type="number"] {
+            -moz-appearance: textfield;
+            border: 1px solid #d1d5db; /* gray-300 */
+            padding: 0.5rem;
+            border-radius: 0.375rem; /* md */
+            font-family: 'monospace';
+            font-size: 1.125rem; /* text-lg */
+            text-align: center;
+            width: 100%;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        /* Value display box */
+        .value-display {
+            font-family: 'monospace';
+            font-size: 1.125rem;
+            padding: 0.5rem;
+            background-color: #f3f4f6; /* gray-100 */
+            border-radius: 0.375rem;
+            min-width: 80px;
+            text-align: center;
+        }
+        /* Button base */
+        .btn {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Specific button colors */
+        .btn-blue { background-color: #3b82f6; } /* blue-500 */
+        .btn-blue:hover:not(:disabled) { background-color: #2563eb; } /* blue-600 */
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Rotation Path Calculator</h1>
+            <p class="text-lg text-gray-600 mt-2">Calculate the efficiency of the two-step principle reset path.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Column 1: Controls -->
+            <div class="card lg:col-span-1 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Define Rotation `R`</h2>
+                    
+                    <p class="text-sm text-gray-600 mb-4">Define a 3D rotation by specifying its axis of rotation (X, Y, Z) and the angle to rotate around that axis.</p>
+                    
+                    <!-- Axis X -->
+                    <div class="mb-4">
+                        <label for="axisX" class="block text-sm font-medium text-gray-700">Axis X</label>
+                        <div class="flex items-center gap-4 mt-1">
+                            <input type="range" id="axisX" min="-1" max="1" value="0" step="0.1" class="flex-1">
+                            <span id="axisXVal" class="value-display">0.0</span>
+                        </div>
+                    </div>
+                    <!-- Axis Y -->
+                    <div class="mb-4">
+                        <label for="axisY" class="block text-sm font-medium text-gray-700">Axis Y</label>
+                        <div class="flex items-center gap-4 mt-1">
+                            <input type="range" id="axisY" min="-1" max="1" value="1" step="0.1" class="flex-1">
+                            <span id="axisYVal" class="value-display">1.0</span>
+                        </div>
+                    </div>
+                    <!-- Axis Z -->
+                    <div class="mb-4">
+                        <label for="axisZ" class="block text-sm font-medium text-gray-700">Axis Z</LabeL>
+                        <div class="flex items-center gap-4 mt-1">
+                            <input type="range" id="axisZ" min="-1" max="1" value="0" step="0.1" class="flex-1">
+                            <span id="axisZVal" class="value-display">0.0</span>
+                        </div>
+                    </div>
+                    <!-- Angle Theta -->
+                    <div class="mb-6">
+                        <label for="angleThetaInput" class="block text-sm font-medium text-gray-700">Angle `θ` (Degrees)</label>
+                        <div class="flex items-center gap-4 mt-1">
+                            <input type="number" id="angleThetaInput" min="0" max="360" value="240" step="1" class="flex-1">
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Action Button -->
+                <div class="space-y-3">
+                    <button id="btnCalculate" class="btn btn-blue text-lg">Calculate Reset Paths</button>
+                </div>
+            </div>
+
+            <!-- Column 2: Results -->
+            <div class="card lg:col-span-1 space-y-6">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Reset Path Comparison</h2>
+                
+                <!-- Display Normalized Axis -->
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Normalized Rotation Axis</h3>
+                    <p id="normalizedAxis" class="font-mono text-center text-lg text-gray-800">[0.00, 1.00, 0.00]</p>
+                </div>
+                
+                <!-- Method 1: Counter-Rotation -->
+                <div class="bg-violet-50 p-4 rounded-lg border border-violet-200">
+                    <h3 class="text-lg font-semibold text-violet-700 mb-3">Method 1: Direct Counter-Rotation</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Path:</strong> <span id="path1_steps" class="font-mono text-gray-700">1 step of -240.0°</span></p>
+                        <p><strong>Total Movement:</strong> <span id="path1_total" class="font-mono text-lg font-bold text-violet-600">240.0°</span></p>
+                    </div>
+                </div>
+                
+                <!-- Method 2: Principle Path -->
+                <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                    <h3 class="text-lg font-semibold text-emerald-700 mb-3">Method 2: Principle Reset Path</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Path:</strong> <span id="path2_steps" class="font-mono text-gray-700">2 steps of 60.0°</span></p>
+                        <p><strong>Total Movement:</strong> <span id="path2_total" class="font-mono text-lg font-bold text-emerald-600">120.0°</span></p>
+                    </div>
+                </div>
+
+                <!-- Efficiency Savings -->
+                <div class="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-200 text-center">
+                    <h3 class="text-lg font-semibold text-blue-800">Efficiency Savings</h3>
+                    <p class="text-2xl font-bold font-mono text-blue-600 mt-2">
+                        <span id="savingsDisplay">120.0°</span>
+                    </p>
+                    <p class="text-sm text-blue-700">of rotation saved with the principle path.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- UI Elements ---
+        const axisXSlider = document.getElementById('axisX');
+        const axisYSlider = document.getElementById('axisY');
+        const axisZSlider = document.getElementById('axisZ');
+        const angleThetaInput = document.getElementById('angleThetaInput');
+        
+        const axisXVal = document.getElementById('axisXVal');
+        const axisYVal = document.getElementById('axisYVal');
+        const axisZVal = document.getElementById('axisZVal');
+        
+        const normalizedAxisDisplay = document.getElementById('normalizedAxis');
+        
+        const path1_steps = document.getElementById('path1_steps');
+        const path1_total = document.getElementById('path1_total');
+        const path2_steps = document.getElementById('path2_steps');
+        const path2_total = document.getElementById('path2_total');
+        const savingsDisplay = document.getElementById('savingsDisplay');
+        
+        const calculateButton = document.getElementById('btnCalculate');
+
+        /**
+         * Updates the live text display for a slider
+         */
+        function updateSliderDisplay() {
+            axisXVal.textContent = parseFloat(axisXSlider.value).toFixed(1);
+            axisYVal.textContent = parseFloat(axisYSlider.value).toFixed(1);
+            axisZVal.textContent = parseFloat(axisZSlider.value).toFixed(1);
+        }
+
+        /**
+         * Clamps the angle input value when the user clicks away
+         */
+        function clampAngleInput() {
+            let angleDeg = parseFloat(angleThetaInput.value);
+            if (isNaN(angleDeg) || angleDeg < 0) {
+                angleThetaInput.value = 0;
+            } else if (angleDeg > 360) {
+                angleThetaInput.value = 360;
+            }
+        }
+
+        /**
+         * The main calculation logic
+         */
+        function performCalculations() {
+            // 1. Read all input values
+            const x = parseFloat(axisXSlider.value);
+            const y = parseFloat(axisYSlider.value);
+            const z = parseFloat(axisZSlider.value);
+            
+            // Clamp the angle just in case
+            clampAngleInput(); 
+            const angleDeg = parseFloat(angleThetaInput.value);
+            
+            // 2. Calculate Normalized Axis (for display)
+            let mag = Math.sqrt(x*x + y*y + z*z);
+            let nx = 0, ny = 1, nz = 0; // Default to Y axis
+            
+            if (mag > 0) {
+                nx = x / mag;
+                ny = y / mag;
+                nz = z / mag;
+            }
+            normalizedAxisDisplay.textContent = `[${nx.toFixed(2)}, ${ny.toFixed(2)}, ${nz.toFixed(2)}]`;
+
+            // 3. Calculate Paths
+            
+            // Method 1: Counter-Rotation (R^-1)
+            const r_inv_angle_deg = -angleDeg;
+            const path1_total_move = Math.abs(r_inv_angle_deg);
+            
+            path1_steps.textContent = `1 step of ${r_inv_angle_deg.toFixed(1)}°`;
+            path1_total.textContent = `${path1_total_move.toFixed(1)}°`;
+
+            // Method 2: Principle Path (S)
+            // S = R^(-1/2). Two solutions: -theta/2 and -theta/2 + 180
+            const s1_deg = -angleDeg / 2.0;
+            const s2_deg = s1_deg + 180.0;
+            
+            // Find the shortest path (smallest absolute angle)
+            let s_angle_deg = (Math.abs(s1_deg) <= Math.abs(s2_deg)) ? s1_deg : s2_deg;
+            
+            const path2_total_move = 2 * Math.abs(s_angle_deg);
+            
+            path2_steps.textContent = `2 steps of ${s_angle_deg.toFixed(1)}°`;
+            path2_total.textContent = `${path2_total_move.toFixed(1)}°`;
+            
+            // 4. Calculate Savings
+            const savings = path1_total_move - path2_total_move;
+            savingsDisplay.textContent = `${savings.toFixed(1)}°`;
+        }
+
+        // --- Event Listeners ---
+        
+        // Add listeners to update live slider displays
+        [axisXSlider, axisYSlider, axisZSlider].forEach(slider => {
+            slider.addEventListener('input', updateSliderDisplay);
+        });
+        
+        // Add a 'blur' listener to clamp the angle input
+        angleThetaInput.addEventListener('blur', clampAngleInput);
+        
+        // Add listener for the main calculate button
+        calculateButton.addEventListener('click', performCalculations);
+
+        // --- Initial Run ---
+        // Run once on load to populate the calculator with the default values
+        updateSliderDisplay();
+        performCalculations();
+    </script>
+</body>
+</html>
+
